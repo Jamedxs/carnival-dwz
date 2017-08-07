@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+ <HEAD>
+  <TITLE> ZTREE DEMO </TITLE>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="../../css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <style>
+	body {
+	background-color: white;
+	margin:0; padding:0;
+	text-align: center;
+	}
+	div, p, table, th, td {
+		list-style:none;
+		margin:0; padding:0;
+		color:#333; font-size:12px;
+		font-family:dotum, Verdana, Arial, Helvetica, AppleGothic, sans-serif;
+	}
+	#testIframe {margin-left: 10px;}
+  </style>
+<script type="text/javascript" src="../../js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="../../js/jquery.ztree.core-3.5.js"></script>
+  <SCRIPT type="text/javascript" >
+  <!--
+	var zTree;
+	var demoIframe;
+
+	var setting = {
+		view: {
+			dblClickExpand: false,
+			showLine: true,
+			selectedMulti: false,
+			expandSpeed: ($.browser.msie && parseInt($.browser.version)<=6)?"":"fast"
+		},
+		data: {
+			simpleData: {
+				enable:true,
+				idKey: "id",
+				pIdKey: "pId",
+				rootPId: ""
+			}
+		},
+		callback: {
+			beforeClick: function(treeId, treeNode) {
+				var zTree = $.fn.zTree.getZTreeObj("tree");
+				if (treeNode.isParent) {
+					zTree.expandNode(treeNode);
+					return false;
+				} else {
+					demoIframe.attr("src",treeNode.file + ".html");
+					return true;
+				}
+			}
+		}
+	};
+
+	var zNodes =[
+		{id:'system', pId:0, name:"[core] 基本功能 演示", open:true},
+		{id:'best', pId:'system', name:"最简单的树 --  标准 JSON 数据", file:"core/standardData"},
+		{id:'best1', pId:'system', name:"最简单的树 --  简单 JSON 数据", file:"core/simpleData"},
+	
+
+		{id:'vo_1', pId:0, name:"[excheck] 复/单选框功能 演示vo", open:false},
+		{id:'be', pId:'vo', name:"Checkbox 勾选操作be", file:"excheck/checkbox"},
+		{id:'be1', pId:'vo', name:"Checkbox nocheck 演示be1", file:"excheck/checkbox_nocheck"},
+	
+		{id:'bee', pId:'be', name:"配合 radio 的隐藏1", file:"exhide/radio"}
+	];
+
+	$(document).ready(function(){
+		var t = $("#tree");
+		t = $.fn.zTree.init(t, setting, zNodes);
+		demoIframe = $("#testIframe");
+		demoIframe.bind("load", loadReady);
+		var zTree = $.fn.zTree.getZTreeObj("tree");
+		zTree.selectNode(zTree.getNodeByParam("id",'vo'));
+
+	});
+
+	function loadReady() {
+		var bodyH = demoIframe.contents().find("body").get(0).scrollHeight,
+		htmlH = demoIframe.contents().find("html").get(0).scrollHeight,
+		maxH = Math.max(bodyH, htmlH), minH = Math.min(bodyH, htmlH),
+		h = demoIframe.height() >= maxH ? minH:maxH ;
+		if (h < 530) h = 530;
+		demoIframe.height(h);
+	}
+
+  //-->
+  </SCRIPT>
+ </HEAD>
+
+<BODY>
+<TABLE border=0 height=600px align=left>
+	<TR>
+		<TD width=260px align=left valign=top style="BORDER-RIGHT: #999999 1px dashed">
+			<ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
+		</TD>
+		<TD width=770px align=left valign=top><IFRAME ID="testIframe" Name="testIframe" FRAMEBORDER=0 SCROLLING=AUTO width=100%  height=600px SRC="core/standardData.html"></IFRAME></TD>
+	</TR>
+</TABLE>
+
+</BODY>
+</HTML>

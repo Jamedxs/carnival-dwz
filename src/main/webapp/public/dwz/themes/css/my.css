@@ -1,0 +1,216 @@
+@charset "utf-8";
+.ybk {
+	border: 1px solid #999999;
+}
+.ac_results {
+	padding: 0px;
+	border: 1px solid black;
+	background-color: white;
+	overflow: hidden;
+	z-index: 99999;
+}
+
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.ac_results li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: default;
+	display: block;
+	/* 
+	if width will be 100% horizontal scrollbar will apear 
+	when scroll mode will be used
+	*/
+	/*width: 100%;*/
+	font: menu;
+	font-size: 12px;
+	/* 
+	it is very important, if line-height not setted or setted 
+	in relative units scroll will be broken in firefox
+	*/
+	line-height: 16px;
+	overflow: hidden;
+	text-align:left
+}
+
+.ac_loading {
+	background: white url('indicator.gif') right center no-repeat;
+}
+
+.ac_odd {
+	background-color: #eee;
+}
+
+.ac_over {
+	background-color: #0A246A;
+	color: white;
+}
+
+.Tb_Frame 
+{     border-left:solid   1px   #666666; 
+      border-top:solid   1px   #666666; 
+      border-right:none; 
+      border-bottom:none; 
+      
+} 
+.Tb_Frame 
+td{   border-right:solid   1px   #666666; 
+      border-bottom:solid   1px   #666666; 
+      border-left:none; 
+      border-top:none; 
+      font-family:verdana   ; 
+      font-size   :9pt; 
+      
+    } 
+body{
+SCROLLBAR-FACE-COLOR:#eeffff; 
+SCROLLBAR-HIGHLIGHT-COLOR:#cccccc; 
+SCROLLBAR-SHADOW-COLOR:#cccccc; 
+SCROLLBAR-3DLIGHT-COLOR:#eeffff; 
+SCROLLBAR-ARROW-COLOR:#cccccc; 
+SCROLLBAR-TRACK-COLOR:#eeffff; 
+SCROLLBAR-DARKSHADOW-COLOR:#eeffff
+} 
+/*table css*/
+.grid table { border:0; border-collapse:collapse;table-layout:fixed;}
+.grid .gridHeader th { padding:0 5px; border-style:solid; border-width:0 1px 1px 0; vertical-align:top; white-space:nowrap; line-height:21px; cursor:default;}
+.grid .gridHeader th.hover, .grid .gridHeader th.thSelected { background-position:0 -50px;}
+.grid .gridTbody td { border-right:solid 1px #ededed; overflow:hidden; padding:0 5px; border-bottom:solid 1px #ededed; vertical-align:top; line-height:28px;}
+.grid .gridTbody td div { display:block; overflow:hidden; height:28px; white-space:nowrap; line-height:28px;}
+.grid .gridTbody td div a{line-height:28px;}
+
+.grid .gridRow { border-style:solid; border-width:0 0 1px 0; cursor:default;}
+.grid .gridRow td.tdLast { padding:0 4px 0 5px; border-right:solid 1px;}
+.grid .gridCol { width:100%; display:block; overflow:hidden; height:21px; line-height:21px; white-space:nowrap;}
+
+/*修正搜索栏li的宽度定死问题*/
+.page .searchBar .searchContent li { float:left; display:block; overflow:hidden;height:30px; padding:2px 0;margin-left:10px;}
+/*修p宽度问题*/
+
+/*修改提示错误宽度*//
+span.error { display:block; overflow:hidden;height:21px; padding:0 3px; line-height:21px; background:#F00; color:#FFF; position:absolute; width:auto;top:5px; left:318px;}
+.vlasc{width:10px;display:inline-block;background-position: 100% 0; background:url(../default/images/order_up.gif) no-repeat left; cursor:pointer;}
+.vldesc{width:10px;display:inline-block;background-position: 100% 0; background:url(../default/images/order_down.gif) no-repeat left; cursor:pointer;}
+/*用户图标*/
+.userhui0{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/hui0.png);
+	background-repeat: no-repeat;
+}
+.userhui1{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/hui1.png);
+	background-repeat: no-repeat;
+}
+.userhui2{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/hui1.png);
+	background-repeat: no-repeat;
+}
+.userhui3{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/hui1.png);
+	background-repeat: no-repeat;
+}
+.userhui4{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/hui1.png);
+	background-repeat: no-repeat;
+}
+.user0{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/0.png);
+	background-repeat: no-repeat;
+}
+.user1{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/1.png);
+	background-repeat: no-repeat;
+}
+.user2{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/2.png);
+	background-repeat: no-repeat;
+}
+.user3{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/3.png);
+	background-repeat: no-repeat;
+}
+.user4{
+    display:block;
+	float:left;
+	margin-right:2px;
+	margin-top:4px;
+	height:21px;
+	width:21px;	
+	background:url(../default/images/user/4.png);
+	background-repeat: no-repeat;
+}
+.divbg{
+    width:100%;
+	background:url(images/bg.jpg);
+	display:block;
+	height:7px;
+}
+.divtitle{
+	width:100%;
+	background:url(images/title_bg.jpg);
+	display:block;
+	height:24px;
+	line-height:24px;
+	padding-left:10px;
+	margin-left:-5px;
+	font-weight:600;
+}

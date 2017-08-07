@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SystemNotification">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from system_notification where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.carnival.entity.SystemNotification" parameterType="int">
+		select * from system_notification where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into SystemNotification(add_man,theme,create_time,note)
+	 values(#{add_man},#{theme},#{create_time},#{note})
+	</insert>
+	<update id="update"  parameterType="int">
+	update SystemNotification set add_man=#{add_man},theme=#{theme},create_time=#{create_time},note=#{note} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from system_notification where Id=#{id}
+	</delete>
+	<select id="getlast" resultType="map" >
+		select system_notification.*,admin_info.admin_realname from system_notification left join admin_info on system_notification.add_man=admin_info.admin_name 
+		ORDER BY create_time DESC LIMIT 0,1 ;
+	</select>
+</mapper> 
+

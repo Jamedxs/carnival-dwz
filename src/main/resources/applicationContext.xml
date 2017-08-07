@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+	
+	<!-- 引入jdbc配置文件 -->
+	<context:property-placeholder location="classpath:dataSource.properties" />
+	
+	<!--创建jdbc数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+	
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global  -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 配置sqlSessionFactory工厂，同时指定数据源 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	    <property name="dataSource" ref="dataSource" />	
+	    <property name="configLocation">  
+            <value>classpath:com/carnival/sqlmapper/sqlMapConfig.xml</value>  
+        </property>  
+	</bean>
+	
+	<!-- 采用spring与mybatis整合的第二种方法 -->
+	<bean id="sqlSession"  class="org.mybatis.spring.SqlSessionTemplate"> 	   
+		 <constructor-arg index="0" ref="sqlSessionFactory" /> 			  
+	</bean> 
+	
+	<!--注入SqlSessionTemplate实例     	-->
+	<bean id="baseDaoImpl" class="com.carnival.dao.impl.BaseDaoImpl">
+		<property name="sqlSessionTemplate" ref="sqlSession" />
+	</bean>
+
+	
+	<!-- 可通过注解控制事务 -->
+	<tx:annotation-driven />
+	
+	<!-- Mapper接口所在包名，Spring会自动查找其下的Mapper MapperScanner配置.自动去搜索mapper里的对象,并注入.-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.carnival.dao.*" />
+	</bean>
+	
+	<!-- 设置SPRING AOP动态捕获异常 1设定为自动代理 2负责记录有异常发生时的信息 3 对指定类的任何方法有效 -->
+	<!--  目前涉及不到aop 先注释掉
+	<bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+	<bean id="exceptionHandler" class="com.paid.util.AopExceptionHandler" />
+	-->
+	<!-- 这里配置切入点，可以为正则表达式 .*DAOImpl\.delete.* -->
+	<!--
+	<bean id="exceptionHandlereAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice">
+			<ref bean="exceptionHandler" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>.*Controller*.*</value>
+			</list>
+		</property>
+	</bean>
+	-->
+	<!-- 文件上传配置 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>  
+	
+</beans>

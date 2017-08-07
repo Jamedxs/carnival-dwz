@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LoginRecord">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from login_record where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and id = '${params.Id}'
+		</if>
+		<if test="params.user_name!=null and params.user_name!=''">
+			and user_name like '%${params.user_name}%'
+		</if>
+		<if test="params.date1!=null and params.date1!=''">
+			and login_date >= date_format('${params.date1}','%Y-%m-%d')
+		</if>
+		<if test="params.date2!=null and params.date2!=''">
+			and date_format(login_date,'%Y-%m-%d') <![CDATA[<=]]> '${params.date2}'
+		</if>
+		<if test="params.login_state!=null and params.login_state!=''">
+			and login_state = '${params.login_state}'
+		</if>
+		<if test="params.note!=null and params.note!=''">
+			and note = '${params.note}'
+		</if>
+	</select>
+	<!-- 查询登录次数 -->
+	<select id="loginNum" resultType="int" parameterType="String">
+		select count(*) from login_record where user_name=#{admin_name} and note=0
+	</select>
+	<!-- 最后一次登录时间 -->
+	<select id="lastLogin" resultType="com.carnival.entity.LoginRecord" parameterType="String">
+		select lr.* from login_record lr where lr.user_name=#{admin_name} and lr.note=0 and lr.login_date=(select max(login_date) from login_record where user_name=#{admin_name}) 
+		order by lr.login_time desc limit 1;
+	</select>
+	<select id="getOne" resultType="com.carnival.entity.LoginRecord" parameterType="int">
+		select * from login_record where id=#{id}
+	</select>
+	<insert id="insert">
+		insert into login_record(user_name,login_time,login_state,real_name,login_ip,note,login_date,enterprise_no)
+	 	values(#{user_name},#{login_time},#{login_state},#{real_name},#{login_ip},#{note},#{login_date},#{enterprise_no})
+	</insert>
+	<update id="update"  parameterType="int">
+		update loginrecord set user_name=#{user_name},login_time=#{login_time},login_state=#{login_state},real_name=#{real_name},login_ip=#{login_ip},note=#{note},login_date=#{login_date} where id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from login_record where id=#{id}
+	</delete>
+</mapper> 
+

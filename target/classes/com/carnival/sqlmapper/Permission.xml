@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Permission">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from permission where 1=1
+		 <if test="params.carte_id!=null and params.carte_id!=''">
+			and carte_id = '${params.carte_id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.carnival.entity.Permission" parameterType="int">
+		select * from permission where Id=#{id}
+	</select>
+	<select id="getAllPermission" resultType="map">
+		select * from permission
+	</select>
+	<select id="getOneInfo" resultType="com.carnival.entity.Permission" parameterType="String">
+		select * from permission where action_method=#{method} and carte_id=#{carte_id}
+	</select>
+	<select id="getAllPermissionByAdminID" resultType="map" parameterType="int">
+		select * from permission where id in (select per_id from permission_mapping where admin_id=#{admin_id})
+	</select>
+	<!-- 添加按钮信息 -->
+	<insert id="insert">
+		insert into permission(lower_href,href,carte_id,button_name,status,behavior,behavior_args,create_time,action_class,action_method)
+	 	values(#{lower_href},#{href},#{carte_id},#{button_name},#{status},#{behavior},#{behavior_args},sysdate(),#{action_class},#{action_method})
+	</insert>
+	<!-- 修改按钮信息 -->
+	<update id="update"  parameterType="int">
+		update permission set lower_href=#{lower_href},href=#{href},carte_id=#{carte_id},button_name=#{button_name},status=#{status},behavior=#{behavior},behavior_args=#{behavior_args} where id=#{id}
+	</update>
+	<!-- 依靠id删除按钮信息 -->
+	<delete id="delete" parameterType="int">
+		delete from permission where id=#{id}
+	</delete>
+	<!-- 依靠菜单id删除按钮信息 -->
+	<delete id="deleteByCarteId" parameterType="int">
+		delete from permission where carte_id=#{carte_id}
+	</delete>
+	<!-- 依靠菜单id查询所有按钮 -->
+	<select id="getButtonByCarteId" resultType = "map" parameterType="int">
+		select id,carte_id,button_name from permission where carte_id in 
+		<foreach item="item" collection="array" open="("  
+            separator="," close=")">  
+            #{item}
+        </foreach> 
+      and status = 0
+	</select>
+	<!-- 根据admin_id查询该用户下所有按钮 -->
+	<select id="getButtonByAdminId" resultType = "map" parameterType="String">
+		select id,carte_id,button_name from permission where id in (select per_id from permission_mapping where admin_id =#{admin_id}) and status = 1
+	</select>
+	<!-- 添加用户按钮权限 -->
+	<insert id="insertUserPer" parameterType="map">
+		insert into permission_mapping(admin_id,per_id)
+		select #{admin_id},id from permission where id in 
+		<foreach item="item" collection="array" open="(" separator="," close=")">  
+            #{item}
+        </foreach>
+	</insert>
+	<!-- 依靠admin_id删除按钮权限映射表 -->
+	<delete id = "deletePerMap" parameterType="String">
+		delete from permission_mapping where admin_id = #{admin_id}
+	</delete>
+</mapper> 
+

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/aop   
+        http://www.springframework.org/schema/aop/spring-aop-3.2.xsd   
+        http://www.springframework.org/schema/beans   
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd   
+        http://www.springframework.org/schema/context   
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd   
+        http://www.springframework.org/schema/mvc   
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd   
+        http://www.springframework.org/schema/tx   
+        http://www.springframework.org/schema/tx/spring-tx-3.2.xsd" default-lazy-init="false">
+    
+	<!-- 动态代理 开启 
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	 -->
+	
+	<!-- 启动注解驱动的Spring MVC功能，注册请求url和注解POJO类方法的映射--> 
+	<mvc:annotation-driven>
+	    <mvc:message-converters>   <!-- 此段用来解决@ResponseBody 输出String 中文出现乱码问题-->
+	      <bean class="org.springframework.http.converter.StringHttpMessageConverter">   
+	          <property name="supportedMediaTypes">   
+	              <list>   
+	                  <value>text/plain;charset=UTF-8</value>   
+	                  <value>text/html;charset=UTF-8</value>   
+	              </list>   
+	          </property>
+	      </bean>    
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<context:annotation-config/>
+	
+	<!-- 启动包扫描功能，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->
+    <context:component-scan base-package="com.carnival.controller" />
+    <context:component-scan base-package="com.carnival.service"/>
+	<context:component-scan base-package="com.carnival.dao"/>
+    <context:component-scan base-package="com.carnival.entity"/>
+	<context:component-scan base-package="com.carnival.aop"/>
+	
+	<!-- 完成请求和注解POJO的映射 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+
+	
+	<bean id="jacksonMessageChanger" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+        <property name="supportedMediaTypes" value="application/json"/>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jacksonMessageChanger"/>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- 静态资源文件 -->
+    <mvc:resources mapping="/**" location="/"/>
+    
+    <!-- 对模型视图名称的解析，在请求时模型视图名称添加前后缀 -->  
+    <bean id="freemarkerResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="order" value="1" />
+        <property name="suffix" value=".ftl" />
+        <property name="contentType" value="text/html;charset=utf-8" />
+        <property name="viewClass">
+            <value>org.springframework.web.servlet.view.freemarker.FreeMarkerView</value>
+        </property>
+        <!-- url加密  -->
+        <property name="attributesMap">  
+	        <map>  
+	            <entry key="encryption">  
+	                <bean class="com.carnival.util.UrlEncryption" />  
+	            </entry>  
+	        </map>  
+    	</property>
+    	
+    </bean>
+    
+    <!-- ViewResolver For FreeMarkerConfigurer -->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath">
+            <value>/views/</value>
+        </property>
+        <property name="freemarkerSettings"><!-- 设置FreeMarker环境属性 -->
+            <props>
+                <prop key="template_update_delay">5</prop><!--刷新模板的周期，单位为秒 -->
+                <prop key="default_encoding">UTF-8</prop><!--模板的编码格式 -->
+                <prop key="locale">UTF-8</prop><!-- 本地化设置 -->
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="number_format">0.####</prop>
+                <prop key="boolean_format">true,false</prop>
+                <prop key="whitespace_stripping">true</prop>
+                <prop key="tag_syntax">auto_detect</prop>
+                <prop key="url_escaping_charset">UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+    
+    	<!-- 拦截器
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.carnival.Interceptor.DataInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors> 
+    	-->
+      <!-- 验证码配置 -->
+     <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">  
+         <property name="config">  
+             <bean class="com.google.code.kaptcha.util.Config">  
+                 <constructor-arg>  
+                     <props>  
+                         <prop key="kaptcha.border">no</prop>  
+                         <prop key="kaptcha.border.color">105,179,90</prop>  
+                         <prop key="kaptcha.textproducer.font.color">red</prop>  
+                         <prop key="kaptcha.image.width">250</prop>  
+                         <prop key="kaptcha.textproducer.font.size">90</prop>  
+                         <prop key="kaptcha.image.height">100</prop>  
+                         <prop key="kaptcha.session.key">code</prop>  
+                         <prop key="kaptcha.textproducer.char.length">4</prop>  
+                         <prop key="kaptcha.textproducer.font.names">宋体,楷体,微软雅黑</prop>  
+                     </props>  
+                 </constructor-arg>  
+             </bean>  
+         </property>  
+     </bean> 
+     
+        
+</beans>

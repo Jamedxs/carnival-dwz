@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PermissionMapping">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from permission_mapping where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.carnival.entity.PermissionMapping" parameterType="int">
+		select * from permission_mapping where Id=#{id}
+	</select>
+	<insert id="insert">
+	insert into PermissionMapping(admin_id,per_id)
+	 values(#{admin_id},#{per_id})
+	</insert>
+	<update id="update"  parameterType="int">
+	update PermissionMapping set admin_id=#{admin_id},per_id=#{per_id} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from permission_mapping where Id=#{id}
+	</delete>
+</mapper> 
+

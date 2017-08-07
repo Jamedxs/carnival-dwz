@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BaseinfoValue">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from baseinfo_value where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.carnival.entity.BaseinfoValue" parameterType="int">
+		select * from baseinfo_value where Id=#{id}
+	</select>
+	
+	<select id="getAllListOrderByKey" resultType="map">
+		select key_en,value_en,value_name,value_content from baseinfo_value order by key_en
+	</select>
+	
+	<select id="getlistByKeyEn" resultType="map" parameterType="String">
+		select key_en,value_en,value_name,value_content from baseinfo_value where key_en=#{key_en} order by key_en
+	</select>
+	
+	<select id="getCountByValueEn" resultType="int" parameterType="com.carnival.entity.BaseinfoKey">
+		select count(*) from baseinfo_value where key_en=#{key_en} and value_en=#{value_en}
+	</select>
+	<!-- 获取基本数据 -->
+	<select id="getDataByKeyen" resultType="map" parameterType="String">
+		select id,value_en,value_name,value_content from baseinfo_value where key_en=#{key_en}
+	</select>
+	
+	<insert id="insert">
+	insert into BaseinfoValue(value_content,value_name,addname,key_en,value_en)
+	 values(#{value_content},#{value_name},#{addname},#{key_en},#{value_en})
+	</insert>
+	<update id="update"  parameterType="int">
+	update BaseinfoValue set value_content=#{value_content},value_name=#{value_name},addname=#{addname},key_en=#{key_en},value_en=#{value_en} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from baseinfo_value where Id=#{id}
+	</delete>
+</mapper> 
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BaseinfoKey">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from baseinfo_key where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	<select id="getOne" resultType="com.carnival.entity.BaseinfoKey" parameterType="int">
+		select * from baseinfo_key where Id=#{id}
+	</select>
+	<!-- 获取数量 -->
+	<select id="getCountByKeyEn" parameterType="String" resultType="int">
+		select count(*) from baseinfo_key where key_en=#{key_en} 
+	</select>
+	<!-- 获取类型(不带参数值的类型) -->
+	<select id="getKeyNoValue" resultType="map">
+		select * from baseinfo_key where vl_num=0 and key_name !='短信模版'
+	</select>
+	<!-- 获取多个值的类型 -->
+	<select id="getKeyByValue" resultType="map">
+		select key_en,key_name from baseinfo_key where vl_num=2 and key_name !='短信模版'
+	</select>
+	<!-- 获取除纯类型外的所有类型 -->
+	<select id="getKeyOneAndTwo" resultType="map">
+		select key_en,key_name,vl_num,key_value from baseinfo_key where vl_num=2 or vl_num=1 
+	</select>
+	<insert id="insert">
+	insert into BaseinfoKey(addtime,parent_key_name,key_name,remark,status,key_value,parent_key_en,addname,key_en,vl_num)
+	 values(#{addtime},#{parent_key_name},#{key_name},#{remark},#{status},#{key_value},#{parent_key_en},#{addname},#{key_en},#{vl_num})
+	</insert>
+	<update id="update"  parameterType="int">
+	update BaseinfoKey set addtime=#{addtime},parent_key_name=#{parent_key_name},key_name=#{key_name},remark=#{remark},status=#{status},key_value=#{key_value},parent_key_en=#{parent_key_en},addname=#{addname},key_en=#{key_en},vl_num=#{vl_num} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from baseinfo_key where Id=#{id}
+	</delete>
+</mapper> 
+

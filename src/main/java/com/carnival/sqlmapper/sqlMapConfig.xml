@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+ 
+  <configuration> 
+ <typeAliases> 	
+ 	<typeAlias alias="map" type="java.util.Map"/> 	
+ 	<typeAlias alias="String" type="java.lang.String"/>
+ 	<typeAlias alias="int" type="java.lang.Integer"/>
+ 	<typeAlias alias="Page" type="com.carnival.entity.Page"/> 	
+ 	<typeAlias alias="admininfo" type="com.carnival.entity.AdminInfo"/>	
+ </typeAliases>
+ 
+  <!-- 拦截器 -->
+<plugins>  
+	<plugin interceptor="com.carnival.util.PageInterceptor">  
+		<property name="databaseType" value="mysql"/>  
+		<property name="printSql" value="1"/> <!-- 自定义 是否打印sql语句 -->
+		<property name="writeSqlLog" value="1"/><!--自定义 是否存储sql语句日志 -->
+		
+	</plugin>  
+</plugins> 
+
+ 
+  <!-- 列出映射文件    -->
+  <mappers>  
+	  <mapper resource="com/carnival/sqlmapper/AdminInfo.xml"/>
+	  <mapper resource="com/carnival/sqlmapper/BaseinfoKey.xml"/>
+	  <mapper resource="com/carnival/sqlmapper/BaseinfoValue.xml"/>
+	  <mapper resource="com/carnival/sqlmapper/LoginRecord.xml"/>
+	  <mapper resource="com/carnival/sqlmapper/BackCarte.xml"/>
+	  <mapper resource="com/carnival/sqlmapper/Permission.xml"/>
+	  <mapper resource="com/carnival/sqlmapper/PermissionMapping.xml"/>
+	  <mapper resource="com/carnival/sqlmapper/SystemNotification.xml"/>
+ </mappers> 
+
+ </configuration> 
+
+
+
+
+
+
+
+
+
+
+

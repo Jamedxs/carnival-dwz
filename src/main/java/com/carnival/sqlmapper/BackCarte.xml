@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BackCarte">
+	<select id="getPageList" resultType="map" parameterType="Page">
+		select * from back_carte where 1=1
+		<if test="params.Id!=null and params.Id!=''">
+			and Id = '${params.Id}'
+		</if>
+	</select>
+	
+	<select id="getAllList" resultType="map">
+		select * from back_carte where 1=1 and belong_platform=1 order by parent_id
+	</select>
+	<select id="getAllBackCartebyParentID" resultType="map">
+		select * from back_carte where 1=1 and belong_platform=1  order by parent_id
+	</select>
+	<select id="getBackCartebyAdminInfoID" resultType="map" parameterType="int">
+		select * from back_carte where 1=1 and belong_platform=1  and id in (select carte_id from user_allot where admin_id=#{admin_id}) order by parent_id
+	</select>
+	
+	<select id="getOne" resultType="com.carnival.entity.BackCarte" parameterType="int">
+		select * from back_carte where Id=#{id}
+	</select>
+
+	<update id="update"  parameterType="int">
+	update BackCarte set belong_platform=#{belong_platform},parents=#{parents},carte_intro=#{carte_intro},levels=#{levels},carte_name=#{carte_name},target=#{target},rel=#{rel},href=#{href},parent_id=#{parent_id} where Id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from back_carte where Id=#{id}
+	</delete>
+	
+	<!-- 添加菜单 -->
+	<insert id="insert" parameterType="com.carnival.entity.BackCarte">
+		insert into back_carte (carte_name,href,target,rel,carte_intro,parent_id,levels,parents,belong_platform)
+		values(#{carte_name},#{href},#{target},#{rel},#{carte_intro},#{parent_id},#{levels},#{parents},1)
+	</insert>
+	<!-- 查询父类parents节点下最大的子节点id -->
+	<select id = "selMaxPid" resultType="map" parameterType="String">
+		select max(ifnull(parent_id,'')) as parentid from back_carte where parents = #{parents}
+	</select>
+	<!-- 查询父类最大的节点id -->
+	<select id = "selMaxParent" resultType="map" parameterType="String">
+		select max(ifnull(parent_id,'')) as parentid from back_carte where levels = 1
+	</select>
+	<!-- 查询该父类下是否存在子节点 -->
+	<select id = "selSize" resultType="map" parameterType="String">
+		select * from back_carte where parents = #{parents} and belong_platform=1 
+	</select>
+	<!-- 查询用户菜单 -->
+	<select id = "selCarteById" resultType="map" parameterType="int">
+		select * from back_carte where Id in (select carte_id from user_allot where admin_id = #{id}) and belong_platform=1  order by parent_id
+	</select>
+	
+</mapper> 
+
